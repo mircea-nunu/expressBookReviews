@@ -41,13 +41,38 @@ public_users.get('/isbn/:isbn',function (req, res) {
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const filtered_by_author = {"booksbyauthor":[]}
+  let author_name = req.params.author
+  arr_isbn = Object.keys(books)
+  for (const [key, value] of Object.entries(books)) {
+    if (value.author === author_name) {
+        let book = {"isbn" : key,
+                    "title": value.title,
+                    "reviews": value.reviews}
+        filtered_by_author["booksbyauthor"].push(book)
+    }
+  }
+//   return res.status(300).json({message: "Yet to be implemented"});
+    res.send(JSON.stringify(filtered_by_author,null,4))
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const filtered_by_title = {"booksbytitle":[]}
+  let book_title = req.params.title
+  arr_isbn = Object.keys(books)
+  for (const [key, value] of Object.entries(books)) {
+    if (value.title === book_title) {
+        let book = {"isbn" : key,
+                    "author": value.author,
+                    "reviews": value.reviews}
+        filtered_by_title["booksbytitle"].push(book)
+    }
+  }
+  
+//   return res.status(300).json({message: "Yet to be implemented"});
+    res.send(JSON.stringify(filtered_by_title,null,4))
 });
 
 //  Get book review
