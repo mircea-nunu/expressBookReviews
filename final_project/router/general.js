@@ -1,5 +1,6 @@
 const express = require('express');
-let books = require("./booksdb.js");
+// let books = require("./booksdb.js");
+let books = require("./auth_users.js").books;
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
@@ -43,7 +44,7 @@ public_users.get('/author/:author',function (req, res) {
   //Write your code here
   const filtered_by_author = {"booksbyauthor":[]}
   let author_name = req.params.author
-  arr_isbn = Object.keys(books)
+  //arr_isbn = Object.keys(books)
   for (const [key, value] of Object.entries(books)) {
     if (value.author === author_name) {
         let book = {"isbn" : key,
@@ -61,7 +62,7 @@ public_users.get('/title/:title',function (req, res) {
   //Write your code here
   const filtered_by_title = {"booksbytitle":[]}
   let book_title = req.params.title
-  arr_isbn = Object.keys(books)
+  //arr_isbn = Object.keys(books)
   for (const [key, value] of Object.entries(books)) {
     if (value.title === book_title) {
         let book = {"isbn" : key,
@@ -70,7 +71,6 @@ public_users.get('/title/:title',function (req, res) {
         filtered_by_title["booksbytitle"].push(book)
     }
   }
-  
 //   return res.status(300).json({message: "Yet to be implemented"});
     res.send(JSON.stringify(filtered_by_title,null,4))
 });
@@ -78,7 +78,16 @@ public_users.get('/title/:title',function (req, res) {
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let rewiew_by_isbn = {}
+  const book_isbn = req.params.isbn
+  //arr_isbn = Object.keys(books)
+  for (const [key, value] of Object.entries(books)) {
+    if (key === book_isbn) {
+        rewiew_by_isbn = value.reviews
+    }
+  }
+    res.send(JSON.stringify(rewiew_by_isbn,null,4))
+//   return res.status(300).json({message: "Yet to be implemented"});
 });
 
 module.exports.general = public_users;

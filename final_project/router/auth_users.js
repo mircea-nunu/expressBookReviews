@@ -47,7 +47,7 @@ regd_users.post("/login", (req,res) => {
     req.session.authorization = {
       accessToken,username
   }
-  return res.status(200).send("User successfully logged in");
+  return res.status(200).send("Customer successfully logged in");
   } else {
     return res.status(208).json({message: "Invalid Login. Check username and password"});
   }
@@ -57,9 +57,27 @@ regd_users.post("/login", (req,res) => {
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const isbn_number = req.params.isbn
+  let book = books[isbn_number]
+  if(book) {
+        const new_review_text = req.query.review
+        const user_review = req.session.authorization.username
+
+        const entries = new Map([
+            [user_review, new_review_text]
+        ]);
+        
+        const new_review = Object.fromEntries(entries);
+        //   console.log(new_review)
+        books[isbn_number]["reviews"] = new_review
+        //   return res.status(300).json({message: "Yet to be implemented"});
+        res.send(`New review added ${books[isbn_number]["reviews"]}`)
+    } else {
+        res.send("Unable to find book!");
+    }
 });
 
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
 module.exports.users = users;
+module.exports.books = books;
