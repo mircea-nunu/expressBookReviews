@@ -71,7 +71,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     }
 });
 
-// Add a book review
+// Delete users book reviews
 regd_users.delete("/auth/review/:isbn", (req, res) => {
     //Write your code here
     const isbn_number = req.params.isbn
