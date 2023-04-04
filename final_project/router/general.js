@@ -30,27 +30,33 @@ public_users.post("/register", (req,res) => {
 // //   return res.status(300).json({message: "Yet to be implemented"});
 //     res.send(JSON.stringify(books,null,4))
 // });
+const url = "http://localhost:5000/";
+const axios = require('axios');
 
-// Get the book list available in the shop Task 10
-public_users.get('/',function (req, res) {
-    //Write your code here
-  //   return res.status(300).json({message: "Yet to be implemented"});
-      res.send(JSON.stringify(books,null,4))
-  });
-
-    const axios = require('axios').default;
-    const connectToURL = async(url)=>{
-        const outcome = axios.get(url);
-        let book_list = (await outcome).data.books;
-        book_list.forEach((book)=>{
-            console.log(JSON.stringify(book,null,4));
-        });
+async function getAll() {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/"
+      );
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return error;
     }
-
-    console.log("Before connect URL")
-    connectToURL('http://localhost').catch(err=>console.log(err.toString()));
-    console.log("After connect URL")
-
+  }
+// Get the book list available in the shop Task 10
+public_users.get('/', async (req, res) => {
+    //Write your code here
+    try {
+        console.log("Making axios call");
+        const response = await axios.get(url);
+        res.status(200).json({ data: response.data });
+      } catch (err) {
+        console.log(err);
+        res.status(500).json({ msg: "something bad has occurred." });
+      }
+  });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
