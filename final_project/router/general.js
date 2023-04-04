@@ -24,12 +24,33 @@ public_users.post("/register", (req,res) => {
 //   return res.status(300).json({message: "Yet to be implemented"});
 });
 
-// Get the book list available in the shop
+// // Get the book list available in the shop Task 1
+// public_users.get('/',function (req, res) {
+//   //Write your code here
+// //   return res.status(300).json({message: "Yet to be implemented"});
+//     res.send(JSON.stringify(books,null,4))
+// });
+
+// Get the book list available in the shop Task 10
 public_users.get('/',function (req, res) {
-  //Write your code here
-//   return res.status(300).json({message: "Yet to be implemented"});
-    res.send(JSON.stringify(books,null,4))
-});
+    //Write your code here
+  //   return res.status(300).json({message: "Yet to be implemented"});
+      res.send(JSON.stringify(books,null,4))
+  });
+
+    const axios = require('axios').default;
+    const connectToURL = async(url)=>{
+        const outcome = axios.get(url);
+        let book_list = (await outcome).data.books;
+        book_list.forEach((book)=>{
+            console.log(JSON.stringify(book,null,4));
+        });
+    }
+
+    console.log("Before connect URL")
+    connectToURL('http://localhost').catch(err=>console.log(err.toString()));
+    console.log("After connect URL")
+
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
