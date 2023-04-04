@@ -79,9 +79,9 @@ regd_users.delete("/auth/review/:isbn", (req, res) => {
     if(book) {
           const user_review = req.session.authorization.username
   
-          books[isbn_number]["reviews"][user_review] = new_review_text
+          delete books[isbn_number]["reviews"][user_review]
           //   return res.status(300).json({message: "Yet to be implemented"});
-          res.send(`The review for the ISBN ${isbn_number} has been added/updated.`)
+          res.send(`Reviews for the ISBN ${isbn_number} posted by the user ${user_review} deleted.`)
       } else {
           res.send("Unable to find book!");
       }
