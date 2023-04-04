@@ -63,19 +63,29 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
         const new_review_text = req.query.review
         const user_review = req.session.authorization.username
 
-        const entries = new Map([
-            [user_review, new_review_text]
-        ]);
-        
-        const new_review = Object.fromEntries(entries);
-        //   console.log(new_review)
-        books[isbn_number]["reviews"] = new_review
+        books[isbn_number]["reviews"][user_review] = new_review_text
         //   return res.status(300).json({message: "Yet to be implemented"});
-        res.send(`New review added ${books[isbn_number]["reviews"]}`)
+        res.send(`The review for the book with ISBN ${isbn_number} has been added/updated.`)
     } else {
         res.send("Unable to find book!");
     }
 });
+
+// Add a book review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    //Write your code here
+    const isbn_number = req.params.isbn
+    let book = books[isbn_number]
+    if(book) {
+          const user_review = req.session.authorization.username
+  
+          books[isbn_number]["reviews"][user_review] = new_review_text
+          //   return res.status(300).json({message: "Yet to be implemented"});
+          res.send(`The review for the ISBN ${isbn_number} has been added/updated.`)
+      } else {
+          res.send("Unable to find book!");
+      }
+  });
 
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
