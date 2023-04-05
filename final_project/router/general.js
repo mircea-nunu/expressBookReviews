@@ -24,42 +24,64 @@ public_users.post("/register", (req,res) => {
 //   return res.status(300).json({message: "Yet to be implemented"});
 });
 
-// // Get the book list available in the shop Task 1
-// public_users.get('/',function (req, res) {
-//   //Write your code here
-// //   return res.status(300).json({message: "Yet to be implemented"});
-//     res.send(JSON.stringify(books,null,4))
-// });
-// const url = "http://localhost:5000/";
+// Get the book list available in the shop Task 1
+public_users.get('/',function (req, res) {
+  //Write your code here
+//   return res.status(300).json({message: "Yet to be implemented"});
+    res.send(JSON.stringify(books,null,4))
+});
+
 const axios = require('axios');
-// const url = 'http://localhost:3000/books';
-const url = 'http://localhost:5000/router/books';
+const url = 'http://localhost:3000/books';
+
 
 async function getAllBooks() {
     try {
       let response = await axios.get(url);
       let data = response.data;
-    console.log(data);
+    // console.log(data);
       return data;
     } catch (error) {
       console.error(error);
     }
   }
+
 // Get the book list available in the shop Task 10
-public_users.get('/', async (request, response) => {
+public_users.get('/async', async (request, response) => {
     
     const books = await getAllBooks();
     response.send(books)
 
 });
 
+async function getBookbyISBN(isbn_number) {
+    url_get = url+"?isbn="+isbn_number
+    console.log(url_get)
+    try {
+      let response = await axios.get(url_get);
+      let data = response.data;
+    // console.log(data);
+      return data;
+    } catch (error) {
+    //   console.error(error);
+    }
+  }
+
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
+public_users.get('/async/isbn/:isbn', async (req, response) => {
   let isbn_number = req.params.isbn
-  filtered_book = books[isbn_number]
-//   return res.status(300).json({message: "Yet to be implemented"});
-    res.send(JSON.stringify(filtered_book,null,4))
+  console.log(isbn_number)
+  const book = await getBookbyISBN(isbn_number);
+    response.send(book)
  });
+
+ // Get book details based on ISBN
+public_users.get('/isbn/:isbn',function (req, res) {
+    let isbn_number = req.params.isbn
+    filtered_book = books[isbn_number]
+  //   return res.status(300).json({message: "Yet to be implemented"});
+      res.send(JSON.stringify(filtered_book,null,4))
+   });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
