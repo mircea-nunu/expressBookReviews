@@ -1,6 +1,6 @@
 const express = require('express');
-// let books = require("./booksdb.js");
-let books = require("./auth_users.js").books;
+let books = require("./booksdb.js");
+// let books = require("./auth_users.js").books;
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
@@ -30,33 +30,28 @@ public_users.post("/register", (req,res) => {
 // //   return res.status(300).json({message: "Yet to be implemented"});
 //     res.send(JSON.stringify(books,null,4))
 // });
-const url = "http://localhost:5000/";
+// const url = "http://localhost:5000/";
 const axios = require('axios');
+// const url = 'http://localhost:3000/books';
+const url = 'http://localhost:5000/router/books';
 
-async function getAll() {
+async function getAllBooks() {
     try {
-      const response = await axios.get(
-        "http://localhost:5000/"
-      );
-      console.log(response);
-      return response.data;
+      let response = await axios.get(url);
+      let data = response.data;
+    console.log(data);
+      return data;
     } catch (error) {
       console.error(error);
-      return error;
     }
   }
 // Get the book list available in the shop Task 10
-public_users.get('/', async (req, res) => {
-    //Write your code here
-    try {
-        console.log("Making axios call");
-        const response = await axios.get(url);
-        res.status(200).json({ data: response.data });
-      } catch (err) {
-        console.log(err);
-        res.status(500).json({ msg: "something bad has occurred." });
-      }
-  });
+public_users.get('/', async (request, response) => {
+    
+    const books = await getAllBooks();
+    response.send(books)
+
+});
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
