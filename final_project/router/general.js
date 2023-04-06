@@ -31,6 +31,16 @@ public_users.get('/',function (req, res) {
     res.send(JSON.stringify(books,null,4))
 });
 
+const getAllBooksPromise = () => {
+    return new Promise((resolve, reject) => resolve(books));
+  };
+  
+  getAllBooksPromise();
+  
+  public_users.get("/promise", function (req, res) {
+    res.send(JSON.stringify(books, null));
+  });
+
 const axios = require('axios');
 const url = 'http://localhost:3000/books';
 
@@ -54,35 +64,36 @@ public_users.get('/async', async (request, response) => {
 
 });
 
+ // Get book details based on ISBN
+ public_users.get('/isbn/:isbn',function (req, res) {
+    let isbn_number = req.params.isbn
+    filtered_book = books[isbn_number]
+  //   return res.status(300).json({message: "Yet to be implemented"});
+      res.send(JSON.stringify(filtered_book,null,4))
+   });
+
 async function getBookbyISBN(isbn_number) {
     url_get = url+"?isbn="+isbn_number
-    console.log(url_get)
+    // console.log(url_get)
     try {
       let response = await axios.get(url_get);
       let data = response.data;
     // console.log(data);
       return data;
     } catch (error) {
-    //   console.error(error);
+      console.error(error);
     }
   }
 
-// Get book details based on ISBN
+// Get book details based on ISBN Task 11
 public_users.get('/async/isbn/:isbn', async (req, response) => {
   let isbn_number = req.params.isbn
-  console.log(isbn_number)
+//   console.log(isbn_number)
   const book = await getBookbyISBN(isbn_number);
     response.send(book)
  });
 
- // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
-    let isbn_number = req.params.isbn
-    filtered_book = books[isbn_number]
-  //   return res.status(300).json({message: "Yet to be implemented"});
-      res.send(JSON.stringify(filtered_book,null,4))
-   });
-  
+
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
@@ -101,6 +112,27 @@ public_users.get('/author/:author',function (req, res) {
     res.send(JSON.stringify(filtered_by_author,null,4))
 });
 
+async function getBookbyAuthor(author_name) {
+    url_get = url+"?author="+author_name
+    // console.log(url_get)
+    try {
+      let response = await axios.get(url_get);
+      let data = response.data;
+    // console.log(data);
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+// Get book details based on author Task 12
+public_users.get('/async/author/:author', async (req, response) => {
+let author_name = req.params.author
+//   console.log(author_name)
+  const books = await getBookbyAuthor(author_name);
+    response.send(books)
+ });
+
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
@@ -118,6 +150,28 @@ public_users.get('/title/:title',function (req, res) {
 //   return res.status(300).json({message: "Yet to be implemented"});
     res.send(JSON.stringify(filtered_by_title,null,4))
 });
+
+
+async function getBookbyTitle(title_name) {
+    url_get = url+"?title="+title_name
+    // console.log(url_get)
+    try {
+      let response = await axios.get(url_get);
+      let data = response.data;
+    // console.log(data);
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+// Get book details based on title Task 13
+public_users.get('/async/title/:title', async (req, response) => {
+    let book_title = req.params.title
+//   console.log(author_name)
+  const books = await getBookbyTitle(book_title);
+    response.send(books)
+ });
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
